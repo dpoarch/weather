@@ -41,8 +41,6 @@ class Location {
 
 class Weather {
   setLocation(location) {
-    // console.log(new Location('x', 1))
-
     if (!(location instanceof Location)) {
       throw 'location parameter is not a Location object'
     }
@@ -66,6 +64,11 @@ class Weather {
       weatherApi.getAllWeather(function(err, response) {
         if (err !== null) {
           return reject(err)
+        }
+
+        if (response.cod >= 400) {
+          let city = weatherApi.getCity()
+          return reject(`${response.message}: ${city}`)
         }
 
         return resolve(response)
